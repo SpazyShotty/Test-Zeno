@@ -87,8 +87,8 @@ end)
 -- Player Tab
 createButton("Player", 50, function()
     local player = game.Players.LocalPlayer
-    player.Character.Humanoid.WalkSpeed = 30
-    player.Character.Humanoid.JumpPower = 100
+    player.Character.Humanoid.WalkSpeed = 16
+    player.Character.Humanoid.JumpPower = 50
 end)
 
 -- Credits Tab
