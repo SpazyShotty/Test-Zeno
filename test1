@@ -1,37 +1,101 @@
-local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+-- Create ScreenGui
+local screenGui = Instance.new("ScreenGui")
+screenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 
-local Window = Rayfield:CreateWindow({
-    Name = "Zeno",
-    Icon = 0, -- Icon in Topbar. Can use Lucide Icons (string) or Roblox Image (number). 0 to use no icon (default).
-    LoadingTitle = "Zeno, Loading...",
-    LoadingSubtitle = "By Zeno",
-    Theme = "Serenity", -- Check https://docs.sirius.menu/rayfield/configuration/themes
+-- Fade In Animation
+screenGui.Enabled = false
+game:GetService("TweenService"):Create(screenGui, TweenInfo.new(2), {Enabled = true}):Play()
 
-    DisableRayfieldPrompts = false,
-    DisableBuildWarnings = false, -- Prevents Rayfield from warning when the script has a version mismatch with the interface
+-- Create Frame
+local frame = Instance.new("Frame")
+frame.Size = UDim2.new(0, 200, 0, 400)
+frame.Position = UDim2.new(0.5, -100, 0.5, -200)
+frame.BackgroundColor3 = Color3.new(0.2, 0.2, 0.2)
+frame.Parent = screenGui
 
-    ConfigurationSaving = {
-       Enabled = true,
-       FolderName = nil, -- Create a custom folder for your hub/game
-       FileName = "Zeno"
-    },
+-- Create Key System
+local keyLabel = Instance.new("TextLabel")
+keyLabel.Size = UDim2.new(1, 0, 0, 50)
+keyLabel.Position = UDim2.new(0, 0, 0, 0)
+keyLabel.BackgroundColor3 = Color3.new(0.3, 0.3, 0.3)
+keyLabel.TextColor3 = Color3.new(1, 1, 1)
+keyLabel.Text = "Enter Key"
+keyLabel.Parent = frame
 
-    Discord = {
-       Enabled = false, -- Prompt the user to join your Discord server if their executor supports it
-       Invite = "noinvitelink", -- The Discord invite code, do not include discord.gg/. E.g. discord.gg/ABCD would be ABCD
-       RememberJoins = true -- Set this to false to make them join the discord every time they load it up
-    },
+local keyBox = Instance.new("TextBox")
+keyBox.Size = UDim2.new(1, 0, 0, 50)
+keyBox.Position = UDim2.new(0, 0, 0, 50)
+keyBox.BackgroundColor3 = Color3.new(0.3, 0.3, 0.3)
+keyBox.TextColor3 = Color3.new(1, 1, 1)
+keyBox.PlaceholderText = "Enter Key Here"
+keyBox.Parent = frame
 
-    KeySystem = false, -- Set this to true to use our key system
-    KeySettings = {
-       Title = "Zeno",
-       Subtitle = "Key System",
-       Note = "No method of obtaining the key is provided", -- Use this to tell the user how to get a key
-       FileName = "Key", -- It is recommended to use something unique as other scripts using Rayfield may overwrite your key file
-       SaveKey = true, -- The user's key will be saved, but if you change the key, they will be unable to use your script
-       GrabKeyFromSite = false, -- If this is true, set Key below to the RAW site you would like Rayfield to get the key from
-       Key = {"69420"} -- List of keys that will be accepted by the system, can be RAW file links (pastebin, github etc) or simple strings ("hello","key22")
-    }
-})
+local submitButton = Instance.new("TextButton")
+submitButton.Size = UDim2.new(1, 0, 0, 50)
+submitButton.Position = UDim2.new(0, 0, 0, 100)
+submitButton.BackgroundColor3 = Color3.new(0.3, 0.3, 0.3)
+submitButton.TextColor3 = Color3.new(1, 1, 1)
+submitButton.Text = "Submit"
+submitButton.Parent = frame
 
-local Tab = Window:CreateTab("Main", "rbxassetid://123456") -- Title, Image
+local mainGui = Instance.new("Frame")
+mainGui.Size = frame.Size
+mainGui.Position = frame.Position
+mainGui.BackgroundColor3 = frame.BackgroundColor3
+mainGui.Visible = false
+mainGui.Parent = screenGui
+
+submitButton.MouseButton1Click:Connect(function()
+    if keyBox.Text == "Zeno" then
+        frame.Visible = false
+        mainGui.Visible = true
+    else
+        keyBox.Text = "Incorrect Key"
+    end
+end)
+
+-- Create Tabs and Buttons in the Main GUI
+local function createButton(name, yPos, callback)
+    local button = Instance.new("TextButton")
+    button.Size = UDim2.new(1, 0, 0, 50)
+    button.Position = UDim2.new(0, 0, 0, yPos)
+    button.BackgroundColor3 = Color3.new(0.3, 0.3, 0.3)
+    button.TextColor3 = Color3.new(1, 1, 1)
+    button.Text = name
+    button.Parent = mainGui
+    button.MouseButton1Click:Connect(callback)
+end
+
+-- Main Tab
+local mainEnabled = false
+createButton("Main", 0, function()
+    mainEnabled = not mainEnabled
+    if mainEnabled then
+        game:GetService("StarterGui"):SetCore("SendNotification", {
+            Title = "Notification";
+            Text = "Doing magic with this script";
+            Duration = 5;
+        })
+        loadstring(game:HttpGet('https://raw.githubusercontent.com/SpazyShotty/Blox-Fruits-Cash-Generator/refs/heads/main/Zeno%20BLOX_FRUIT_CG.lua'))()
+    else
+        -- Code to stop or destroy the script
+        -- (Replace this with your actual stop script logic)
+        print("Script disabled")
+    end
+end)
+
+-- Player Tab
+createButton("Player", 50, function()
+    local player = game.Players.LocalPlayer
+    player.Character.Humanoid.WalkSpeed = 30
+    player.Character.Humanoid.JumpPower = 100
+end)
+
+-- Credits Tab
+createButton("Credits", 100, function()
+    game:GetService("StarterGui"):SetCore("SendNotification", {
+        Title = "Credits";
+        Text = "Made by Zeno";
+        Duration = 5;
+    })
+end)
